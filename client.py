@@ -79,23 +79,3 @@ class Client():
         except:
             raise FtpProxyError('Bad response from proxy')
 
-
-if __name__ == '__main__':
-    ftp_proxy = FtpProxy(host='localhost', port=8080)
-    ftp_client = ftp_proxy.connect('192.168.0.104', port=2121, login='yolo')
-
-    assert ftp_client.ping() is True
-    files, directories = ftp_client.ls()
-    assert files and directories
-
-    files2, directories = ftp_client.ls(recursive=True)
-    assert len(files2) > len(files)
-
-    files3, directories = ftp_client.ls(recursive=True, extension='.txt')
-    assert not directories
-    assert files3[0].endswith('.txt')
-
-    fp = ftp_client.download(path='/fu.txt')
-    with open('/tmp/fu.txt', 'wb') as ff:
-        ff.write(fp.read())
-    assert fp.tell() > 0
