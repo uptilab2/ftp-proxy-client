@@ -63,12 +63,8 @@ class Client():
             params['path'] = path
         if extension:
             params['extension'] = extension
-        try:
-            result = self.query('/ftp/ls', params).json()
-            return result.get('files', []), result.get('directories', [])
-        except FtpProxyError:
-            pass
-            # raise FtpProxyError('Bad response from proxy')
+        result = self.query('/ftp/ls', params).json()
+        return result.get('files', []), result.get('directories', [])
 
 
     def download(self, path=None):
@@ -77,7 +73,6 @@ class Client():
             params = {'path': path}
         try:
             return BytesIO(self.query('/ftp/download', params).content)
-        except FtpProxyError:
-            pass
-            # raise FtpProxyError('Bad response from proxy')
+        except TypeError:
+            raise FtpProxyError('Cannot open this file')
 
