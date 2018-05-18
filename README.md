@@ -1,32 +1,32 @@
-# ftp-proxy-client
-This module allows you to explore and download a file from a FTP via a proxy.
+# ftp-proxy-client ![travis](https://travis-ci.com/uptilab2/ftp-proxy-client.svg?branch=master)
+An FTP client for [ftp-proxy](https://github.com/uptilab2/ftp-proxy)
 
-The ftp-proxy module is a great addition to this one.
+## Current features:
+- Test successful connection to FTP server through proxy
+- List files and directories
+- Download a file
 
-## Setup
-- run ``pip install ftp-proxy-client``
-- on your python script, ``import FtpProxy``
+## Installation
+`pip install ftp-proxy-client`
 
 ## Usage
-Here is an example of usage that covers all the methods available:
+```
+    ftp_proxy = FtpProxy(host='foo', port=8080)
+    ftp_client = ftp_proxy.connect('192.168.0.1', port=8080, login='foobar')
 
-	if __name__ == '__main__':
-	    ftp_proxy = FtpProxy(host='foo', port=8080)
-	    ftp_client = ftp_proxy.connect('192.168.0.1', port=8080, login='foobar')
+    assert ftp_client.ping() is True
+    files, directories = ftp_client.ls()
+    assert files and directories
 
-	    assert ftp_client.ping() is True
-	    files, directories = ftp_client.ls()
-	    assert files and directories
+    files2, directories = ftp_client.ls(recursive=True)
+    assert len(files2) > len(files)
 
-	    files2, directories = ftp_client.ls(recursive=True)
-	    assert len(files2) > len(files)
+    files3, directories = ftp_client.ls(recursive=True, extension='.txt')
+    assert not directories
+    assert files3[0].endswith('.txt')
 
-	    files3, directories = ftp_client.ls(recursive=True, extension='.txt')
-	    assert not directories
-	    assert files3[0].endswith('.txt')
-
-	    fp = ftp_client.download(path='/foo.txt')
-	    with open('/tmp/foo.txt', 'wb') as ff:
-		ff.write(fp.read())
-	    assert fp.tell() > 0
-
+    fp = ftp_client.download(path='/foo.txt')
+    with open('/tmp/foo.txt', 'wb') as ff:
+    ff.write(fp.read())
+    assert fp.tell() > 0
+```
