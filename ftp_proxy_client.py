@@ -20,9 +20,7 @@ class FtpProxy():
             host = host[6:]
 
         if protocol == 'ftp':
-            client = FtpClient(self.proxy_host, host, port, login, password)
-            client.ping()
-            return client
+            return FtpClient(self.proxy_host, host, port, login, password)
 
         raise FtpProxyError(f'Protocol is not (yet) supported: "{protocol}"')
 
@@ -111,7 +109,7 @@ class FtpClient(BaseClient):
             params['path'] = path
         if extension:
             params['extension'] = extension
-        response = self.query('/ls', params)
+        response = self.query('/ls', params=params)
         data = response.json()
         return data['files'], data['directories']
 
