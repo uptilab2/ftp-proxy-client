@@ -66,8 +66,9 @@ class Client():
         try:
             result = self.query('/ftp/ls', params).json()
             return result.get('files', []), result.get('directories', [])
-        except:
-            raise FtpProxyError('Bad response from proxy')
+        except FtpProxyError:
+            pass
+            # raise FtpProxyError('Bad response from proxy')
 
 
     def download(self, path=None):
@@ -76,6 +77,7 @@ class Client():
             params = {'path': path}
         try:
             return BytesIO(self.query('/ftp/download', params).content)
-        except:
-            raise FtpProxyError('Bad response from proxy')
+        except FtpProxyError:
+            pass
+            # raise FtpProxyError('Bad response from proxy')
 
