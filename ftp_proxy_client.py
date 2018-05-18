@@ -35,6 +35,11 @@ class BaseClient():
         self.session.headers.update(headers)
 
     def build_headers(self, host, port, login, password):
+        if host is None:
+            split_host = host.rsplit(':', 1)
+            if len(split_host) > 1 and split_host[1].isdigit():
+                host, port = split_host
+
         headers = {'X-ftpproxy-host': host}
         if port:
             headers['X-ftpproxy-port'] = str(port)
