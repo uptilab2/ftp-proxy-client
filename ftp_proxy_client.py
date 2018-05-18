@@ -9,6 +9,9 @@ class FtpProxyError(Exception):
 
 class FtpProxy():
     def __init__(self, host, port=2121):
+        split_host = host.rsplit(':', 1)
+        if len(split_host) > 1 and split_host[1].isdigit():
+            host, port = split_host
         protocol = '' if '://' in host else 'http://'
         self.proxy_host = f'{protocol}{host}:{port}'
 
