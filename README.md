@@ -15,14 +15,13 @@ An FTP client for [ftp-proxy](https://github.com/uptilab2/ftp-proxy)
     ftp_client = ftp_proxy.connect('192.168.0.1', port=8080, login='foobar')
 
     assert ftp_client.ping() is True
-    files, directories = ftp_client.ls()
-    assert files and directories
+    files = ftp_client.ls()
+    assert files
 
-    files2, directories = ftp_client.ls(recursive=True)
+    files2 = ftp_client.ls(recursive=True)
     assert len(files2) > len(files)
 
-    files3, directories = ftp_client.ls(recursive=True, extension='.txt')
-    assert not directories
+    files3 = ftp_client.ls(recursive=True, extension='.txt')
     assert files3[0].endswith('.txt')
 
     fp = ftp_client.download(path='/foo.txt')
