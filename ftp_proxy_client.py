@@ -96,8 +96,8 @@ class FtpClient(BaseClient):
         :param extension: (optional) filter files by extension
         :type path: str
 
-        :return: files, directories
-        :rtype: tuple
+        :return: files list
+        :rtype: `list` of `str`
 
         Usage::
 
