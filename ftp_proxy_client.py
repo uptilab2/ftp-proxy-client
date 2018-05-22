@@ -21,6 +21,8 @@ class FtpProxy():
 
         if protocol == 'ftp':
             return FtpClient(self.proxy_host, host, port, login, password)
+        elif protocol == 'sftp':
+            return SftpClient(self.proxy_host, host, port, login, password)
 
         raise FtpProxyError(f'Protocol is not (yet) supported: "{protocol}"')
 
@@ -110,8 +112,7 @@ class FtpClient(BaseClient):
         if extension:
             params['extension'] = extension
         response = self.query('/ls', params=params)
-        data = response.json()
-        return data['files'], data['directories']
+        return response.json()
 
     def download(self, path):
         """Retrieve a file from FTP server
@@ -136,3 +137,11 @@ class FtpClient(BaseClient):
         for chunk in response.iter_content():
             buf.write(chunk)
         return buf
+
+
+class SftpClient(FtpClient):
+    protocol_prefix = '/sftp'
+
+    def ls(self, path=None, extension=None):
+        """Override to disable recursive parameter"""
+        return super().ls(path=path, extension=extension)
